@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.ArachnoMania.GameState;
+import com.mygdx.game.GameScreen.GameState;
 
 public class Spider {
 
@@ -96,5 +96,13 @@ public class Spider {
 
 	public float getX() {
 		return spiderPosition.x;
+	}
+	
+	public float getWidth() {
+		return spider.getKeyFrames()[0].getRegionWidth();
+	}
+
+	public float getHeight() {
+		return spider.getKeyFrames()[0].getRegionHeight();
 	}
 }

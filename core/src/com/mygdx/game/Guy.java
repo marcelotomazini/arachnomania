@@ -1,14 +1,12 @@
 package com.mygdx.game;
 
-import java.util.Random;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.ArachnoMania.GameState;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Guy {
 	
@@ -23,7 +21,6 @@ public class Guy {
 	private Animation guy;
 
 	public Guy() {
-//		Texture frame1 = new Texture("guy1.png");
 		Texture frame2 = new Texture("guy2.png");
 		Texture frame3 = new Texture("guy3.png");
 		
@@ -38,19 +35,25 @@ public class Guy {
 		guyVelocity.set(0, 0);
 	}
 
-	public void update(GameState gameState) {
-		if (gameState != GameState.Start)
+	public void update(Viewport viewport, float spiderXPosition) {
+		if(guyPosition.x + 100 > spiderXPosition && guyPosition.x - 100 < spiderXPosition)
 			return;
 			
-		Random random = new Random(13);
-		if(random.nextInt() % 2 == 0)
+		if(guyPosition.x < spiderXPosition)
 			guyVelocity.set(VELOCITY_X, 0);
 		else
 			guyVelocity.set(-VELOCITY_X, 0);
 		
-//			guyVelocity.add(1, 0);
-		
 		guyPosition.mulAdd(guyVelocity, 0.03f);
+		
+		float left = 0;
+	    float right = viewport.getWorldWidth() - guy.getKeyFrames()[0].getRegionWidth();
+	    
+		if(guyPosition.x < left)
+			guyPosition.x = left;
+		
+		if(guyPosition.x > right)
+			guyPosition.x = right;
 	}
 
 	public TextureRegion getKeyFrame(float planeStateTime) {
