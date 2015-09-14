@@ -1,11 +1,15 @@
 package com.mygdx.game;
 
+import static com.mygdx.game.Messages.ABOUT;
+import static com.mygdx.game.Messages.NEW_GAME;
+import static com.mygdx.game.Messages.OPTIONS;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -19,73 +23,57 @@ public class MenuScreen extends ScreenAdapter {
 	private Table mainTable = new Table();
 	private Table menuTable = new Table();
 	
-	private SpriteBatch batch;
 	private ArachnoMania game;
-	private OrthographicCamera camera;
-	private BitmapFont font;
 	
 	TextButton btnNew;
-
+	TextButton btnOptions;
+	TextButton btnAbout;
+	
 	public MenuScreen(ArachnoMania arachnoMania) {
 		game = arachnoMania;
-
 		create();
-		
-		game.setScreen(this);
 	}
 
 	private void create() {
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
+		Gdx.input.setInputProcessor(stage);
 		
-		batch = new SpriteBatch();
-		font = new BitmapFont();
-		
-		BitmapFont font = new BitmapFont();
-		skin.add("font", font);
+		skin.add("font", new BitmapFont());
 
-		btnNew = new TextButton("New", skin);
+		btnNew = new TextButton(NEW_GAME.getValue(), skin);
+		btnOptions = new TextButton(OPTIONS.getValue(), skin);
+		btnAbout = new TextButton(ABOUT.getValue(), skin);
 		
 		menuTable.add(btnNew).pad(50);
+		menuTable.row();
+		menuTable.add(btnOptions).pad(50);
+		menuTable.row();
+		menuTable.add(btnAbout).pad(50);
 		
 		
 		mainTable.add(menuTable);
 		mainTable.setFillParent(true);
+		
 		stage.addActor(mainTable);
-//		stage.setViewport(width, height);
+		
+		btnNew.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+			
+			@Override
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				game.setGameScreen();
+			}
+		});
 	}
 	
 	@Override
 	public void render(float delta) {
-//		update();
-//		draw();
+		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		Gdx.gl20.glClearColor(1, 1, 1, 1);
-		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		stage.act();
-		stage.draw();
-//		Table.drawDebug(stage);
-	}
-	
-	private void update() {
-//		if (Gdx.input.isTouched()) {
-//		    game.setScreen(new GameScreen(game));
-//		    dispose();
-//		}		
-	}
-
-	private void draw() {
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
-
-		batch.begin();
-		
-		batch.draw(game.background, 0, 0);
-		font.draw(batch, "Welcome to Slingshot Steve!!! ", 100, 150);
-		font.draw(batch, "Tap anywhere to begin!", 100, 100);
-		
-		batch.end();
-		
-		stage.draw();
+		stage.act(delta);
+	    stage.draw();
 	}
 }

@@ -7,12 +7,24 @@ public class ArachnoMania extends Game {
 
 	public Texture background;
 	
+	private MenuScreen menuScreen;
+	private GameScreen gameScreen;
+
 	@Override
 	public void create() {
 		background = new Texture("background.png");
 		
-		new MenuScreen(this);
+		menuScreen = new MenuScreen(this);
+		gameScreen = new GameScreen(this);
+		
+		setScreen(menuScreen);
 	}
 	
-	
+	public void setGameScreen() {
+		setScreen(gameScreen);
+	}
+
+	public void setMenuScreen() {
+		setScreen(menuScreen);
+	}
 }

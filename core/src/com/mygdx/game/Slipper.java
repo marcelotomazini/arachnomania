@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class Slipper {
 
 	private static final float SLIPPER_START_Y = 0;
-	private static final float SLIPPER_START_X = 50;
 	
 	private static final float SLIPPER_JUMP_IMPULSE = 350;
 	private static final float SLIPPER_VELOCITY_X = 200;
@@ -23,8 +22,6 @@ public class Slipper {
 	private final Vector2 gravity = new Vector2();
 	
 	private Animation slipper;
-	private long timeElapsed = System.currentTimeMillis();
-	private long totalTime = 0;
 	private boolean stopUpdate = false;
 	
 	public Slipper() {
@@ -45,13 +42,13 @@ public class Slipper {
 		return slipper.getKeyFrame(planeStateTime);
 	}
 
-	public void reset() {
-		slipperPosition.set(SLIPPER_START_X, SLIPPER_START_Y);
+	public void reset(float x) {
+		slipperPosition.set(x, SLIPPER_START_Y);
 		gravity.set(0, GRAVITY);
 		stopUpdate = false;
 	}
 
-	public void update(Viewport viewport) {
+	public void update(Viewport viewport, float x) {
 		if(!stopUpdate) {
 			float top = viewport.getWorldHeight() - slipper.getKeyFrames()[0].getRegionHeight();
 			if(slipperPosition.y > top)
@@ -61,7 +58,7 @@ public class Slipper {
 		}
 		
 		if(slipperPosition.y < 0)
-			reset();
+			reset(x);
 		
 		slipperVelocity.add(gravity);
 		slipperPosition.mulAdd(slipperVelocity, 0.01f);

@@ -64,9 +64,9 @@ public class GameScreen extends ScreenAdapter {
 		
 		ready = new TextureRegion(new Texture("ready.png"));
 		gameOver = new TextureRegion(new Texture("gameover.png"));
-		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
-		music.setLooping(true);
-		music.play();
+//		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+//		music.setLooping(true);
+//		music.play();
 		explode = Gdx.audio.newSound(Gdx.files.internal("explode.wav"));
 		
 		resetWorld();
@@ -82,7 +82,7 @@ public class GameScreen extends ScreenAdapter {
 		score = 0;
 		spider.reset();
 		guy.reset();
-		slipper.reset();
+		slipper.reset(guy.getX());
 	}
 
 	private void update() {
@@ -105,13 +105,14 @@ public class GameScreen extends ScreenAdapter {
 		}
 		
 		guy.update(viewport, spider.getX());
-		slipper.update(viewport);
+		slipper.update(viewport, guy.getX());
 		
 		Rectangle spiderRectangle = new Rectangle(spider.getX(), spider.getY(), spider.getWidth(), spider.getHeight());
 		Rectangle slipperRectangle = new Rectangle(slipper.getX(), slipper.getY(), slipper.getWidth(), slipper.getHeight());
 		
 		if(spiderRectangle.overlaps(slipperRectangle)) {
 			gameState = GameState.GameOver;
+			arachnoMania.setMenuScreen();
 			resetWorld();
 		}
 	}
