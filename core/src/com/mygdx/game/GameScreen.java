@@ -6,10 +6,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -26,8 +24,6 @@ public class GameScreen extends ScreenAdapter {
 	Viewport viewport;
 
 	float groundOffsetX = 0;
-	TextureRegion ready;
-	TextureRegion gameOver;
 	BitmapFont font;
 	
 	
@@ -46,7 +42,6 @@ public class GameScreen extends ScreenAdapter {
 		create();
 	}
 
-//	@Override
 	public void create() {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();	
@@ -61,13 +56,6 @@ public class GameScreen extends ScreenAdapter {
 		spider = new Spider();
 		guy = new Guy();
 		slipper = new Slipper();
-		
-		ready = new TextureRegion(new Texture("ready.png"));
-		gameOver = new TextureRegion(new Texture("gameover.png"));
-//		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
-//		music.setLooping(true);
-//		music.play();
-		explode = Gdx.audio.newSound(Gdx.files.internal("explode.wav"));
 		
 		resetWorld();
 	}
@@ -101,6 +89,7 @@ public class GameScreen extends ScreenAdapter {
 		
 		if (gameState == GameState.GameOver) {
 			gameState = GameState.Start;
+			arachnoMania.setMenuScreen();
 			resetWorld();
 		}
 		
@@ -130,18 +119,7 @@ public class GameScreen extends ScreenAdapter {
 		batch.end();
 		
 		batch.begin();
-		if (gameState == GameState.Start) {
-			batch.draw(ready,
-					Gdx.graphics.getWidth() / 2 - ready.getRegionWidth() / 2,
-					Gdx.graphics.getHeight() / 2 - ready.getRegionHeight() / 2);
-		}
-		if (gameState == GameState.GameOver) {
-			batch.draw(
-					gameOver,
-					Gdx.graphics.getWidth() / 2 - gameOver.getRegionWidth() / 2,
-					Gdx.graphics.getHeight() / 2 - gameOver.getRegionHeight()
-							/ 2);
-		}
+		
 		if (gameState == GameState.GameOver || gameState == GameState.Running) {
 			font.draw(batch, "" + score, Gdx.graphics.getWidth() / 2,
 					Gdx.graphics.getHeight() - 60);

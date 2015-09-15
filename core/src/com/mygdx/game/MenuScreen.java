@@ -7,13 +7,17 @@ import static com.mygdx.game.Messages.OPTIONS;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MenuScreen extends ScreenAdapter {
 
@@ -24,6 +28,10 @@ public class MenuScreen extends ScreenAdapter {
 	private Table menuTable = new Table();
 	
 	private ArachnoMania game;
+	
+	private SpriteBatch batch;
+	private OrthographicCamera camera;
+	private Viewport viewport;
 	
 	TextButton btnNew;
 	TextButton btnOptions;
@@ -36,6 +44,13 @@ public class MenuScreen extends ScreenAdapter {
 
 	private void create() {
 		Gdx.input.setInputProcessor(stage);
+		
+		batch = new SpriteBatch();
+		camera = new OrthographicCamera();	
+		viewport = new FillViewport(800, 480, camera);
+		viewport.apply();
+		
+		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
 		
 		skin.add("font", new BitmapFont());
 
@@ -73,7 +88,13 @@ public class MenuScreen extends ScreenAdapter {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+	    camera.update();
+		batch.setProjectionMatrix(camera.combined);    
+	    batch.begin();
+		batch.draw(game.background, 0, 0);
 		stage.act(delta);
-	    stage.draw();
+		batch.end();
+		
+		stage.draw();
 	}
 }

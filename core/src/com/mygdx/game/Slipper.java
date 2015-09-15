@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -21,10 +23,14 @@ public class Slipper {
 	private final Vector2 slipperVelocity = new Vector2();
 	private final Vector2 gravity = new Vector2();
 	
+	private final Sound launch;
+	
 	private Animation slipper;
 	private boolean stopUpdate = false;
 	
 	public Slipper() {
+		launch = Gdx.audio.newSound(Gdx.files.internal("CultScream3.wav"));
+		
 		Texture frame1 = new Texture("slipper1.png");
 		Texture frame2 = new Texture("slipper2.png");
 		Texture frame3 = new Texture("slipper3.png");
@@ -46,6 +52,8 @@ public class Slipper {
 		slipperPosition.set(x, SLIPPER_START_Y);
 		gravity.set(0, GRAVITY);
 		stopUpdate = false;
+		
+		launch.play();
 	}
 
 	public void update(Viewport viewport, float x) {
